@@ -1,3 +1,6 @@
 node_modules
 yarn-error.log
 yarn.lock
+src/config/prod.js
+src/config/testing.js
+dist
