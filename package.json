@@ -34,7 +34,7 @@
     "verbose": true,
     "testURL": "http://localhost/",
     "testEnvironment": "node",
-    "setupTestFrameworkScriptFile": "<rootDir>/test-db-setup.js",
+    "setupTestFrameworkScriptFile": "<rootDir>/test_db_setup.js",
     "testPathIgnorePatterns": [
       "dist/"
     ],
@@ -54,9 +54,13 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-config-standard": "^16.0.3",
     "eslint-friendly-formatter": "^4.0.1",
+    "eslint-loader": "^4.0.2",
     "eslint-plugin-import": "^2.25.3",
     "eslint-plugin-jest": "^25.2.4",
     "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-promise": "^5.1.1",
+    "eslint-plugin-standard": "^5.0.0",
     "jest": "^27.3.1",
     "mock-req-res": "^1.2.0",
     "nodemon": "^2.0.15",
