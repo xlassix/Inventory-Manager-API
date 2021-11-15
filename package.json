@@ -1,0 +1,58 @@
+{
+  "name": "Inventory_Manager",
+  "version": "1.2",
+  "description": "Inventory system based on Zoho Inventory",
+  "main": "index.js",
+  "repository": "https://github.com/xlassix/Inventory-Manager",
+  "author": "xlassix",
+  "license": "MIT",
+  "scripts": {
+    "build": "babel src --out-dir dist",
+    "test": "cross-env NODE_ENV=testing jest --forceExit --detectOpenHandles  --silent",
+    "test-routes": "yarn test -t router",
+    "test-models": "yarn test -t model",
+    "test-controllers": "yarn test -t controllers",
+    "test-auth": "yarn test -t Authentication:",
+    "dev": "nodemon --exec yarn restart",
+    "restart": "rimraf dist && yarn build && yarn start",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "cuid": "^2.1.8",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "loadash": "^1.0.0",
+    "mongoose": "^6.0.12",
+    "morgan": "^1.10.0",
+    "validator": "^13.7.0"
+  },
+  "jest": {
+    "verbose": true,
+    "testURL": "http://localhost/",
+    "testEnvironment": "node",
+    "setupTestFrameworkScriptFile": "<rootDir>/test-db-setup.js",
+    "testPathIgnorePatterns": [
+      "dist/"
+    ],
+    "restoreMocks": true
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-eslint": "^10.1.0",
+    "babel-jest": "^27.3.1",
+    "cross-env": "^7.0.3",
+    "eslint": "^8.2.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-friendly-formatter": "^4.0.1",
+    "jest": "^27.3.1",
+    "mock-req-res": "^1.2.0",
+    "nodemon": "^2.0.15",
+    "prettier": "^2.4.1",
+    "rimraf": "^3.0.2",
+    "supertest": "^6.1.6"
+  }
+}
