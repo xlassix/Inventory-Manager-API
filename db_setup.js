@@ -1,4 +1,3 @@
-import mongoose,{Types} from 'mongoose'
 import { User, UserRole } from './src/api/User/user.model'
 import _ from 'underscore'
 import { connect } from './src/util/db'
@@ -60,13 +59,19 @@ const initDB = async () => {
   UserRole.count(async (err, count)=>  {
     if (count == 0) {
         console.log("count :", count)
-        const doc = await UserRole.create({
+        const doc = await UserRole.create([{
             title:'Admin',
             user: "Admin",
             userRole: 'Admin',
             purchaseOrder: 'Admin',
             warehouse: 'Admin',
-        })
+        },{
+          title:'Anonymous',
+          user: "None",
+          userRole: 'None',
+          purchaseOrder: 'None',
+          warehouse: 'None',
+      }])
         console.log(docs)
     }
   })
