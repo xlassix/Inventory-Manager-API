@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import bcrypt from 'bcrypt'
 
 const userSchema = new mongoose.Schema(
   {
@@ -31,7 +32,6 @@ const userSchema = new mongoose.Schema(
     phone: {
       type: Number,
       required: true,
-
       unique: true,
     },
     role: {
@@ -42,15 +42,40 @@ const userSchema = new mongoose.Schema(
       {
         type: mongoose.SchemaTypes.ObjectId,
         ref: 'warehouse',
-        unique: true,
       },
     ],
+    password: {
+      type: String,
+      required: true,
+    },
   },
   { timestamps: true }
 )
+userSchema.pre('save', function (next) {
+  if (!this.isModified('password')) {
+    return next()
+  }
+
+  bcrypt.hash(this.password, 8, (err, hash) => {
+    if (err) {
+      return next(err)
+    }
+
+    this.password = hash
+    next()
+  })
+})
+
+userSchema.statics.createWithRole = async(userdata, role) =>{
+  var result= await UserRole.findOne({ title: role }).exec()
+  if (!result){
+    throw  Error(`${role} does not exist`);
+  }
+  userdata.role = result._id
+  return User.create(userdata)
+}
 
 const userRoleSchema = new mongoose.Schema({
-  _id: false,
   title: {
     type: String,
     required: true,
@@ -64,7 +89,12 @@ const userRoleSchema = new mongoose.Schema({
     enum: ['None', 'Viewer', 'Creator', 'Editor', 'Admin'],
     default: 'None',
   },
-  PurchaseOrder: {
+  user: {
+    type: String,
+    enum: ['None', 'Viewer', 'Creator', 'Editor', 'Admin'],
+    default: 'None',
+  },
+  purchaseOrder: {
     type: String,
     enum: ['None', 'Viewer', 'Creator', 'Editor', 'Admin'],
     default: 'None',
