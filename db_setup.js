@@ -1,4 +1,6 @@
-import { User, UserRole } from './src/api/User/user.model'
+import mongoose from 'mongoose'
+import { User } from './src/api/user/user.model'
+import { UserRole } from './src/api/user_role/user_role.model'
 import _ from 'underscore'
 import { connect } from './src/util/db'
 
@@ -6,12 +8,12 @@ function toObject(_arr) {
   var output = {}
 
   for (let i = 0; i < _arr.length; i += 2) {
-    output[_arr[i].split("--")[1]] = _arr[i + 1]
+    output[_arr[i].split('--')[1]] = _arr[i + 1]
   }
   return output
 }
 
-const createUser = async()=>  {
+const createUser = async () => {
   var required_field = [
     '--first_name',
     '--last_name',
@@ -28,7 +30,7 @@ const createUser = async()=>  {
   }
   var data = toObject(value)
   var errors = required_field.reduce((result, elem) => {
-    elem= elem.split("--")[1]
+    elem = elem.split('--')[1]
     if (!(elem in data)) {
       result += `${elem} is missing\n`
     }
@@ -44,37 +46,33 @@ const createUser = async()=>  {
     console.log(errors)
     process.exit()
   }
-  var {role,...userdata}=data
-  await connect()
-  try{
-  const doc =await User.createWithRole(userdata,role)
-  console.log(await doc.populate('role'))
-}catch(e){
-  console.error(e.message)
-}
+  var { role, ...userdata } = data
+  try {
+    const doc = await User.createWithRole(userdata, role)
+    console.log(doc.toJSON())
+  } catch (e) {
+    console.error(e.message)
+  }
   process.exit()
 }
 const initDB = async () => {
   await connect()
-  UserRole.count(async (err, count)=>  {
-    if (count == 0) {
-        console.log("count :", count)
-        const doc = await UserRole.create([{
-            title:'Admin',
-            user: "Admin",
-            userRole: 'Admin',
-            purchaseOrder: 'Admin',
-            warehouse: 'Admin',
-        },{
-          title:'Anonymous',
-          user: "None",
-          userRole: 'None',
-          purchaseOrder: 'None',
-          warehouse: 'None',
-      }])
-        console.log(docs)
-    }
-  })
+  var count = await UserRole.count()
+  if (count == 0) {
+    console.log('count :', count)
+    const docs = await UserRole.create([
+      {
+        title: 'Admin',
+      },
+      {
+        title: 'Adein4',
+      },
+      {
+        title: 'Admein4',
+      },
+    ])
+    console.log(docs)
+  }
+  createUser()
 }
 initDB()
-createUser()

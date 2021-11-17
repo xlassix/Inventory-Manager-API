@@ -1,7 +1,8 @@
 import mongoose from 'mongoose'
 import cuid from 'cuid'
 import _ from 'lodash'
-import {User, UserRole} from "./src/api/User/user.model"
+import {User} from './src/api/user/user.model'
+import {UserRole} from './src/api/user_role/user_role.model'
 
 const models = { User, UserRole }
 
@@ -14,9 +15,9 @@ global.newId = () => {
   return mongoose.Types.ObjectId()
 }
 
-const remove = collection =>
+const remove = (collection) =>
   new Promise((resolve, reject) => {
-    collection.remove(err => {
+    collection.remove((err) => {
       if (err) return reject(err)
       resolve()
     })
@@ -25,20 +26,17 @@ const remove = collection =>
 beforeEach(async () => {
   const db = cuid()
   function clearDB() {
-    return Promise.all(_.map(mongoose.connection.collections, c => remove(c)))
+    return Promise.all(_.map(mongoose.connection.collections, (c) => remove(c)))
   }
 
   if (mongoose.connection.readyState === 0) {
     try {
-      await mongoose.connect(
-        url + db,
-        {
-          useNewUrlParser: true,
-          autoIndex: true
-        }
-      )
+      await mongoose.connect(url + db, {
+        useNewUrlParser: true,
+        autoIndex: true,
+      })
       await clearDB()
-      await Promise.all(Object.keys(models).map(name => models[name].init()))
+      await Promise.all(Object.keys(models).map((name) => models[name].init()))
     } catch (e) {
       console.log('connection error')
       console.error(e)
@@ -49,8 +47,8 @@ beforeEach(async () => {
   }
 })
 
-afterEach(async ()=> {
+afterEach(async () => {
   await mongoose.connection.db.dropDatabase()
   await mongoose.disconnect()
 })
-afterAll(()=>{})
+afterAll(() => {})

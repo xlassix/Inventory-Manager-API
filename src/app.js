@@ -6,6 +6,7 @@ import { connect } from './util/db'
 import  AppError  from './util/error'
 import errorHandler from './util/errorController'
 import device from 'express-device'
+import {signin,signup,protect} from './util/auth'
 
 export const app = express()
 
