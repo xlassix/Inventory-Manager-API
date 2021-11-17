@@ -67,7 +67,7 @@ export const protect = async (req, res, next) => {
 }
 
 export const onlyAuthorized = async (req, res, next) => {
-  try {
+  // try {
     if (
       !req.headers.authorization ||
       !req.headers.authorization.startsWith(`Bearer `)
@@ -77,49 +77,49 @@ export const onlyAuthorized = async (req, res, next) => {
     const data = await verifyToken(
       req.headers.authorization.split(`Bearer `)[1]
     )
-    const user = await User.findById(data.id).select('-password').lean().exec()
+    const user = await User.findById(data.id).select('-password').exec()
     if (user) {
       var root_path = req.path.split('/')[0]
-      req.user = user
-      console.log(user)
+      req.user = user.toJSON()
+      console.log(user.toJSON(),req.user.role[routeModelMap[root_path]])
       switch (req.method) {
         case 'DELETE':
         case 'delete':
-          if (user.role[routeModelMap[root_path]] == 'Admin') {
-            next()
+          if (req.user.role[routeModelMap[root_path]] == 'Admin') {
+            return next()
           }
           break
         case 'PUT':
         case 'put':
           if (
-            ['Admin', 'Editor'].include(user.role[routeModelMap[root_path]])
+            ['Admin', 'Editor'].includes(req.user.role[routeModelMap[root_path]])
           ) {
-            next()
+            return next()
           }
           break
         case 'POST':
         case 'post':
           if (
-            ['Admin', 'Editor','creator'].include(user.role[routeModelMap[root_path]])
+            ['Admin', 'Editor','Creator'].includes(req.user.role[routeModelMap[root_path]])
           ) {
-            next()
+            return next()
           }
           break
         case 'GET':
         case 'get':
             if (
-              ['Admin', 'Editor','creator','Viewer'].include(user.role[routeModelMap[root_path]])
+              ['Admin', 'Editor','Creator','Viewer'].includes(req.user.role[routeModelMap[root_path]])
             ) {
-              next()
+              return next()
             }
             break
         default:
-          return res.status(401).json({"message":"UnAuthorized kindly contact the Admin"})
+          return res.status(401).end()
       }
-      return res.status(401).json({"message":"UnAuthorized kindly contact the Admin"})
+      return res.status(401).end()
     }
-  } catch (err) {
-    console.log(err)
-    return res.status(500).end()
-  }
+  // } catch (err) {
+  //   console.log(err)
+  //   return res.status(500).end()
+  // }
 }

@@ -49,7 +49,7 @@ const createUser = async () => {
   var { role, ...userdata } = data
   try {
     const doc = await User.createWithRole(userdata, role)
-    console.log(doc.toJSON())
+    console.log(doc)
   } catch (e) {
     console.error(e.message)
   }

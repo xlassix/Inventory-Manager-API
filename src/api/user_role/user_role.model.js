@@ -9,13 +9,13 @@ const userRoleSchema = new mongoose.Schema(
       maxlength: 50,
       unique: true
     },
-    user_roles:{
+    user_role:{
       type: String,
       required: true,
       enum: ['None', 'Viewer',"Creator","Editor","Admin"],
       default: 'None',
     },
-    users:{
+    user:{
       type: String,
       required: true,
       enum: ['None', 'Viewer',"Creator","Editor","Admin"],

@@ -1,8 +1,16 @@
-import { newToken, verifyToken, signup, signin, protect } from '../auth'
+import {
+  newToken,
+  verifyToken,
+  signup,
+  signin,
+  protect,
+  onlyAuthorized,
+} from '../auth'
 import mongoose from 'mongoose'
 import jwt from 'jsonwebtoken'
 import config from '../../config'
 import { User } from '../../api/user/user.model'
+import { UserRole } from '../../api/user_role/user_role.model'
 
 describe('Authentication:', () => {
   describe('newToken', () => {
@@ -10,7 +18,6 @@ describe('Authentication:', () => {
       const id = 123
       const token = newToken({ id })
       const user = jwt.verify(token, config.secrets.jwt)
-
       expect(user.id).toBe(id)
     })
   })
@@ -114,10 +121,11 @@ describe('Authentication:', () => {
     test('passwords must match', async () => {
       expect.assertions(2)
 
-      await User.create({          email: 'hello@hello.com',
-      password: '293jssh',
-      first_name: 'error',
-      last_name: 'hello',
+      await User.create({
+        email: 'hello@hello.com',
+        password: '293jssh',
+        first_name: 'error',
+        last_name: 'hello',
       })
 
       const req = { body: { email: 'hello@me.com', password: 'wrong' } }
@@ -144,8 +152,8 @@ describe('Authentication:', () => {
       }
       const savedUser = await User.create(fields)
 
-      let {first_name,last_name,...login_data}=fields
-      const req = { body:  login_data}
+      let { first_name, last_name, ...login_data } = fields
+      const req = { body: login_data }
       const res = {
         status(status) {
           expect(status).toBe(201)
@@ -225,6 +233,237 @@ describe('Authentication:', () => {
 
       const next = () => {}
       await protect(req, {}, next)
+      expect(req.user._id.toString()).toBe(user._id.toString())
+      expect(req.user).not.toHaveProperty('password')
+    })
+  }),
+    describe('onlyAuthorised', () => {
+      test('looks for Bearer token in headers', async () => {
+        expect.assertions(2)
+
+        const req = { headers: {} }
+        const res = {
+          status(status) {
+            expect(status).toBe(401)
+            return this
+          },
+          end() {
+            expect(true).toBe(true)
+          },
+        }
+
+        await onlyAuthorized(req, res)
+      }),
+        test('reject wrong Bearer', async () => {
+          expect.assertions(2)
+
+          const req = {
+            headers: { authorization: newToken({ id: '123sfkj' }) },
+          }
+          const res = {
+            status(status) {
+              expect(status).toBe(401)
+              return this
+            },
+            end() {
+              expect(true).toBe(true)
+            },
+          }
+
+          await onlyAuthorized(req, res)
+        })
+
+      test('must reject unauthorized user', async () => {
+        expect.assertions(2)
+
+        const role = await UserRole.create({ title: 'randomRole' })
+        const user = await User.createWithRole(
+          {
+            email: 'hello@hello.com',
+            password: '293jssh',
+            first_name: 'error',
+            last_name: 'hello',
+          },
+          'randomRole'
+        )
+        const req = {
+          method: 'GET',
+          path :"roles/s",
+          headers: { authorization: `Bearer ${newToken(user)}` },
+        }
+        const res = {
+          status(status) {
+            expect(status).toBe(401)
+            return this
+          },
+          end() {
+            expect(true).toBe(true)
+          },
+        }
+
+        await onlyAuthorized(req, res)
+      }),
+    test('Test viewer User- Get', async () => {
+      expect.assertions(2)
+
+      const role = await UserRole.create({ title: 'randomRole',user:"Viewer" })
+      const user = await User.createWithRole(
+        {
+          email: 'hello@hello.com',
+          password: '293jssh',
+          first_name: 'error',
+          last_name: 'hello',
+        },
+        'randomRole'
+      )
+      const req = {
+        method: 'GET',
+        path :"user",
+        headers: { authorization: `Bearer ${newToken(user)}` },
+      }
+
+      const next = () => {}
+      await onlyAuthorized(req, {}, next)
+      expect(req.user._id.toString()).toBe(user._id.toString())
+      expect(req.user).not.toHaveProperty('password')
+    }),
+    test('Test viewer User-post', async () => {
+      expect.assertions(2)
+
+      const role = await UserRole.create({ title: 'randomRole',user:"Viewer" })
+      const user = await User.createWithRole(
+        {
+          email: 'hello@hello.com',
+          password: '293jssh',
+          first_name: 'error',
+          last_name: 'hello',
+        },
+        'randomRole'
+      )
+      const req = {
+        method: 'POST',
+        path :"user",
+        headers: { authorization: `Bearer ${newToken(user)}` },
+      }
+      const res = {
+        status(status) {
+          expect(status).toBe(401)
+          return this
+        },
+        end() {
+          expect(true).toBe(true)
+        },
+      }
+      await onlyAuthorized(req, res)
+    }),
+    test('Test viewer User-Delete', async () => {
+      expect.assertions(2)
+
+      const role = await UserRole.create({ title: 'randomRole',user:"Viewer" })
+      const user = await User.createWithRole(
+        {
+          email: 'hello@hello.com',
+          password: '293jssh',
+          first_name: 'error',
+          last_name: 'hello',
+        },
+        'randomRole'
+      )
+      const req = {
+        method: 'DELETE',
+        path :"user",
+        headers: { authorization: `Bearer ${newToken(user)}` },
+      }
+      const res = {
+        status(status) {
+          expect(status).toBe(401)
+          return this
+        },
+        end() {
+          expect(true).toBe(true)
+        },
+      }
+      await onlyAuthorized(req, res)
+    }),
+    test('Test Creator User-Delete', async () => {
+      expect.assertions(2)
+
+      const role = await UserRole.create({ title: 'randomRole',user:"Creator" })
+      const user = await User.createWithRole(
+        {
+          email: 'hello@hello.com',
+          password: '293jssh',
+          first_name: 'error',
+          last_name: 'hello',
+        },
+        'randomRole'
+      )
+      const req = {
+        method: 'DELETE',
+        path :"user",
+        headers: { authorization: `Bearer ${newToken(user)}` },
+      }
+      const res = {
+        status(status) {
+          expect(status).toBe(401)
+          return this
+        },
+        end() {
+          expect(true).toBe(true)
+        },
+      }
+      await onlyAuthorized(req, res)
+    }),
+    test('Test Creator  User- Edit', async () => {
+      expect.assertions(2)
+
+      const role = await UserRole.create({ title: 'randomRole',user:"Creator" })
+      const user = await User.createWithRole(
+        {
+          email: 'hello@hello.com',
+          password: '293jssh',
+          first_name: 'error',
+          last_name: 'hello',
+        },
+        'randomRole'
+      )
+      const req = {
+        method: 'PUT',
+        path :"user",
+        headers: { authorization: `Bearer ${newToken(user)}` },
+      }
+      const res = {
+        status(status) {
+          expect(status).toBe(401)
+          return this
+        },
+        end() {
+          expect(true).toBe(true)
+        },
+      }
+      await onlyAuthorized(req, res)
+    }),
+    test('Test Admin  User- Edit', async () => {
+      expect.assertions(2)
+
+      const role = await UserRole.create({ title: 'randomRole',user:"Admin" })
+      const user = await User.createWithRole(
+        {
+          email: 'hello@hello.com',
+          password: '293jssh',
+          first_name: 'error',
+          last_name: 'hello',
+        },
+        'randomRole'
+      )
+      const req = {
+        method: 'PUT',
+        path :"user",
+        headers: { authorization: `Bearer ${newToken(user)}` },
+      }
+
+      const next = () => {}
+      await onlyAuthorized(req, {}, next)
       expect(req.user._id.toString()).toBe(user._id.toString())
       expect(req.user).not.toHaveProperty('password')
     })
