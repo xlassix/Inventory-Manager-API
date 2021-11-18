@@ -1,10 +1,10 @@
-import { Warehouse } from '../warehouse.model'
+import { Item } from '../item.model'
 import mongoose from 'mongoose'
 
-describe('Warehouse model', () => {
-  describe('WarehouseSchema', () => {
+describe('Item  model', () => {
+  describe('Item Schema', () => {
     test('name', () => {
-      const name = Warehouse.schema.obj.name
+      const name = Item.schema.obj.name
       expect(name).toEqual({
         type: String,
         required: true,
@@ -13,9 +13,9 @@ describe('Warehouse model', () => {
         unique: true,
       })
     }),
-      test('email', () => {
-        const email = Warehouse.schema.obj.email
-        expect(email).toEqual({
+      test('SKU', () => {
+        const SKU = Item.schema.obj.SKU
+        expect(SKU).toEqual({
           type: String,
           required: true,
           trim: true,
@@ -24,29 +24,35 @@ describe('Warehouse model', () => {
         })
       }),
       test('status', () => {
-        const status = Warehouse.schema.obj.status
+        const status = Item.schema.obj.status
         expect(status).toEqual({
           type: String,
           required: true,
-          enum: ['active', 'inactive'],
-          default: 'active',
+          enum: ['active', 'out-of-stock'],
+          default: 'out-of-stock',
         })
       }),
-      test('phone', () => {
-        const phone = Warehouse.schema.obj.phone
-        expect(phone).toEqual({
-          type: Number,
-          required: true,
-          unique: true,
-        })
-      }),
-      test('location', () => {
-        const location = Warehouse.schema.obj.location
-        expect(location).toEqual({
+      test('type', () => {
+        const type = Item.schema.obj.type
+        expect(type).toEqual({
           type: String,
-          required: true,
           trim: true,
-          maxlength: 100,
+          maxlength: 50,
+        })
+      }),
+      test('unit', () => {
+        const unit = Item.schema.obj.unit
+        expect(unit).toEqual({
+          type: String,
+          trim: true,
+          maxlength: 50,
+        })
+      }),
+      test('warehouseId', () => {
+        const warehouseId = Item.schema.obj.warehouseId
+        expect(warehouseId).toEqual({
+          type: mongoose.SchemaTypes.ObjectId,
+          ref: 'warehouseId',
         })
       })
   })

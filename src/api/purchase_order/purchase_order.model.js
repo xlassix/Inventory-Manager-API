@@ -24,29 +24,23 @@ const purchaseOrderSchema = new mongoose.Schema(
     status: {
       type: String,
       required: true,
-      enum: ['active', 'inactive'],
-      default: 'active',
+      enum: ['placed', 'awaiting',"incomplete","complete"],
+      default: 'placed',
     },
     total_value_requested: {
-      type: Double,
-      unique: true,
-      sparse: true,
+      type: Number,
     },
     total_value_delivered: {
-      type: Double,
-      unique: true,
-      sparse: true,
+      type: Number,
     },
     total_value_paid: {
-      type: Double,
-      unique: true,
-      sparse: true,
+      type: Number,
     },
     warehouseId: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'warehouse',
     },
-    related_item: [
+    related_items: [
       {
         type: mongoose.SchemaTypes.ObjectId,
         ref: 'purchase_order_item',
@@ -56,7 +50,7 @@ const purchaseOrderSchema = new mongoose.Schema(
       },
     ],
     createdBy: {
-      type: mongoose.SchemaType.ObjectId,
+      type: mongoose.SchemaTypes.ObjectId,
       ref: 'user',
     },
   },
@@ -80,29 +74,25 @@ const purchaseOrderItemSchema = new mongoose.Schema(
       trim: true,
       required: true,
     },
-    quantity_order: {
-      type: String,
-      trim: true,
-      required: true,
+    quantity_request: {
+      type: Number
     },
     quantity_delivered: {
-      type: String,
-      trim: true,
-      required: true,
+      type: Number
     },
-    price_rate: {
-      type: String,
-      trim: true,
-      required: true,
+    rate_on_request: {
+      type: Number
     },
-    price_rate_on_delivery: {
-      type: String,
-      trim: true,
-      required: true,
+    rate_on_delivery: {
+      type: Number
+    },
+    amount_paid: {
+      type: Number
     },
   },
   { timestamps: true }
 )
+purchaseOrderItemSchema.index({purchase:1,itemId:1},{unique:true})
 
 export const PurchaseOrder = mongoose.model(
   'purchase_order',

@@ -41,12 +41,11 @@ describe('Warehouse model', () => {
         })
       }),
       test('location', () => {
-        const location = Warehouse.schema.obj.location
-        expect(location).toEqual({
+        const address = Warehouse.schema.obj.address
+        expect(address).toEqual({
           type: String,
           required: true,
           trim: true,
-          maxlength: 100,
         })
       })
   })
