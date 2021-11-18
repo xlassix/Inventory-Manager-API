@@ -9,11 +9,10 @@ const warehouseSchema = new mongoose.Schema(
       maxlength: 50,
       unique: true,
     },
-    location: {
+    address: {
       type: String,
       required: true,
       trim: true,
-      maxlength: 100
     },
     status: {
       type: String,
