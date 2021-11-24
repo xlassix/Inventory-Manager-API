@@ -9,9 +9,6 @@
   "scripts": {
     "build": "babel src --out-dir dist",
     "test": "cross-env NODE_ENV=testing jest --forceExit --detectOpenHandles  --silent",
-    "test-routes": "yarn test -t router",
-    "test-models": "yarn test -t model",
-    "test-controllers": "yarn test -t controllers",
     "test-auth": "yarn test -t Authentication:",
     "dev": "nodemon --exec yarn restart",
     "restart": "rimraf dist && yarn build && yarn start",
