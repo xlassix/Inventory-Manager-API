@@ -1,12 +1,13 @@
 import { Router } from 'express'
 import controllers from './warehouse.controller'
+import {createWarehouseSchemaValidator} from "./warehouse.validator"
 
 const router = Router()
 
 router
   .route('/')
   .get(controllers.getOne)
-  .post(controllers.createOne)
+  .post(createWarehouseSchemaValidator ,controllers.createOne)
 
 router
   .route('/:id')

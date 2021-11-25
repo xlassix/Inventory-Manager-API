@@ -21,7 +21,7 @@ const userRoleSchema = new mongoose.Schema(
       enum: ['None', 'Viewer',"Creator","Editor","Admin"],
       default: 'None',
     },
-    warehouseid:{
+    warehouse:{
       type: String,
       required: true,
       enum: ['None', 'Viewer',"Creator","Editor","Admin"],

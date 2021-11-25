@@ -7,7 +7,7 @@ import  AppError  from './util/error'
 import errorHandler from './util/errorController'
 import device from 'express-device'
 import warehouseRouter from "./api/warehouse/warehouse.route"
-import {signin,signup,onlyAuthorized} from './util/auth'
+import {signin,onlyAuthorized} from './util/auth'
 
 export const app = express()
 
@@ -19,6 +19,7 @@ app.use(cors())
 app.use(express.json({ limit: '5mb' }))
 app.use(express.urlencoded({ limit: '5mb', extended: true }))
 app.use(morgan('dev'))
+app.use("/signin",signin)
 
 app.use("/warehouse",onlyAuthorized,warehouseRouter)
 
@@ -40,7 +41,7 @@ export const start = async () => {
   try {
     await connect()
     app.listen(config.port, () => {
-      console.log(`REST API on http://localhost:${config.port}/api`)
+      console.log(`REST API on http://localhost:${config.port}/`)
     })
   } catch (e) {
     console.error('here is the error: ', e)
