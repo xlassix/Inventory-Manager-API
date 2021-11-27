@@ -1,4 +1,5 @@
 import { Warehouse } from '../warehouse.model'
+import router from '../warehouse.route'
 import mongoose from 'mongoose'
 
 describe('Warehouse model', () => {
@@ -40,7 +41,7 @@ describe('Warehouse model', () => {
           unique: true,
         })
       }),
-      test('location', () => {
+      test('address', () => {
         const address = Warehouse.schema.obj.address
         expect(address).toEqual({
           type: String,
@@ -48,5 +49,22 @@ describe('Warehouse model', () => {
           trim: true,
         })
       })
+  }),
+  describe('Warehouse router', () => {
+    const routes = [
+      { path: '/', method: 'get' },
+      { path: '/:id', method: 'get' },
+      { path: '/:id', method: 'delete' },
+      { path: '/:id', method: 'put' },
+      { path: '/', method: 'post' }
+    ]
+    routes.forEach(route => {
+    test(`has path ${route.path}, Method: ${route.method}`, () => {  
+        const match = router.stack.find(
+          s => s.route.path === route.path && s.route.methods[route.method]
+        )
+        expect(match).toBeTruthy()
+      })
+    })
   })
 })

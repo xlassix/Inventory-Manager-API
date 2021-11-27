@@ -8,7 +8,7 @@ const baseConfig = {
   port: 3000,
   secrets: {
     jwt: process.env.JWT_SECRET,
-    jwtExp: '1d'
+    jwtExp: '20d'
   }
 }
 

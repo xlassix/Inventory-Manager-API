@@ -24,7 +24,7 @@ const createUser = async () => {
   var value = process.argv.slice(2)
   if (value.length < 1) {
     console.log(
-      'params required \n --firstname: first_name \n -last_name: lastname \n --phone: phone \n -e : email\n --password : password\n -role: role[]'
+      'params required \n --first_name: first_name \n -last_name: last_name \n --phone: phone \n --email : email\n --password : password\n --role: role[]'
     )
     process.exit(1)
   }
@@ -49,7 +49,7 @@ const createUser = async () => {
   var { role, ...userdata } = data
   try {
     const doc = await User.createWithRole(userdata, role)
-    console.log(doc)
+    console.log(doc.toJSON())
   } catch (e) {
     console.error(e.message)
   }
@@ -63,12 +63,13 @@ const initDB = async () => {
     const docs = await UserRole.create([
       {
         title: 'Admin',
+        purchase_order: 'Admin',
+        user: 'Admin',
+        user_role: 'Admin',
+        warehouse: "Admin"
       },
       {
-        title: 'Adein4',
-      },
-      {
-        title: 'Admein4',
+        title: 'Anonymous',
       },
     ])
     console.log(docs)

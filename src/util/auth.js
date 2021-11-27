@@ -18,7 +18,7 @@ export const verifyToken = (token) =>
   })
 
 export const signup = async (req, res) => {
-  if (!req.body.email || !req.body.password) {
+  if (!req.body.email || !req.body.password ) {
     return res.status(400).send({ message: 'email and password required' })
   }
   const user = await User.create(req.body)
@@ -56,12 +56,11 @@ export const protect = async (req, res, next) => {
     )
     const user = await User.findById(data.id).select('-password').lean().exec()
     if (user) {
-      console.log(user)
       req.user = user
       next()
     }
   } catch (err) {
-    console.log(err)
+    console.log(err.message)
     return res.status(401).end()
   }
 }
@@ -79,12 +78,11 @@ export const onlyAuthorized = async (req, res, next) => {
     )
     const user = await User.findById(data.id).select('-password').exec()
     if (user) {
-      var root_path = req.path.split('/')[0]
+      var root_path = req.originalUrl.split('/')[1]
       req.user = user.toJSON()
-      console.log(user.toJSON(),req.user.role[routeModelMap[root_path]])
       switch (req.method) {
         case 'DELETE':
-        case 'delete':
+        case 'delete': 
           if (req.user.role[routeModelMap[root_path]] == 'Admin') {
             return next()
           }
@@ -118,8 +116,4 @@ export const onlyAuthorized = async (req, res, next) => {
       }
       return res.status(401).end()
     }
-  // } catch (err) {
-  //   console.log(err)
-  //   return res.status(500).end()
-  // }
 }

@@ -14,6 +14,11 @@ const warehouseSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    warehouse_id: {
+      type: String,
+      required: true,
+      trim: true,
+    },
     status: {
       type: String,
       required: true,
@@ -39,5 +44,11 @@ const warehouseSchema = new mongoose.Schema(
   },
   { timestamps: true }
 )
+
+warehouseSchema.pre('validate', async function (next) {
+  var count = await Warehouse.count()
+  this.warehouse_id = `WH-${String(count).padStart(5, '0')}`
+  next()
+})
 
 export const Warehouse = mongoose.model('warehouse', warehouseSchema)
