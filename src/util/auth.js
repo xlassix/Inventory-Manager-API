@@ -4,7 +4,6 @@ import { routeModelMap } from './route_model_map'
 import jwt from 'jsonwebtoken'
 
 export const newToken = (user) => {
-  console.log({ id: user.id })
   return jwt.sign({ id: user.id }, config.secrets.jwt, {
     expiresIn: config.secrets.jwtExp,
   })
