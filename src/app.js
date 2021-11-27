@@ -7,7 +7,7 @@ import  AppError  from './util/error'
 import errorHandler from './util/errorController'
 import device from 'express-device'
 import warehouseRouter from "./api/warehouse/warehouse.route"
-import {signin,onlyAuthorized} from './util/auth'
+import {signin,protect,onlyAuthorized} from './util/auth'
 
 export const app = express()
 
@@ -19,7 +19,7 @@ app.use(cors())
 app.use(express.json({ limit: '5mb' }))
 app.use(express.urlencoded({ limit: '5mb', extended: true }))
 app.use(morgan('dev'))
-app.use("/signin",signin)
+app.post("/signin",signin)
 
 app.use("/warehouse",onlyAuthorized,warehouseRouter)
 

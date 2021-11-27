@@ -1,3 +1,4 @@
+import AppError from "./error"
 export const getOne = model => async (req, res) => {
   try {
     const doc = await model
@@ -19,7 +20,7 @@ export const getOne = model => async (req, res) => {
 export const getMany = model => async (req, res) => {
   try {
     const docs = await model
-      .find({ createdBy: req.user._id })
+      .find()
       .lean()
       .exec()
 
@@ -30,13 +31,16 @@ export const getMany = model => async (req, res) => {
   }
 }
 
-export const createOne = model => async (req, res) => {
+export const createOne = model => async (req, res,next) => {
   const createdBy = req.user._id
   try {
     const doc = await model.create({ ...req.body, createdBy })
     res.status(201).json({ data: doc })
   } catch (e) {
-    console.error(e)
+    console.error(e.message)
+    if(e.message.includes("duplicate")){
+      next(new AppError(`the values ${Object.values(e.keyValue)} already exist at ${Object.keys(e.keyValue)}`,406))
+    }
     res.status(400).end()
   }
 }

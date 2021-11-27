@@ -4,6 +4,7 @@ import { routeModelMap } from './route_model_map'
 import jwt from 'jsonwebtoken'
 
 export const newToken = (user) => {
+  console.log({ id: user.id })
   return jwt.sign({ id: user.id }, config.secrets.jwt, {
     expiresIn: config.secrets.jwtExp,
   })
@@ -79,12 +80,12 @@ export const onlyAuthorized = async (req, res, next) => {
     )
     const user = await User.findById(data.id).select('-password').exec()
     if (user) {
-      var root_path = req.path.split('/')[0]
+      var root_path = req.originalUrl.split('/')[1]
       req.user = user.toJSON()
-      console.log(user.toJSON(),req.user.role[routeModelMap[root_path]])
+      console.log(req.method)
       switch (req.method) {
         case 'DELETE':
-        case 'delete':
+        case 'delete': 
           if (req.user.role[routeModelMap[root_path]] == 'Admin') {
             return next()
           }
@@ -118,8 +119,4 @@ export const onlyAuthorized = async (req, res, next) => {
       }
       return res.status(401).end()
     }
-  // } catch (err) {
-  //   console.log(err)
-  //   return res.status(500).end()
-  // }
 }

@@ -53,6 +53,7 @@ describe('Item  model', () => {
         expect(warehouseId).toEqual({
           type: mongoose.SchemaTypes.ObjectId,
           ref: 'warehouseId',
+          required: true
         })
       })
   })

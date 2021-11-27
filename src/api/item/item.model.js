@@ -12,6 +12,7 @@ const ItemSchema = new mongoose.Schema(
     warehouseId: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'warehouseId',
+      required: true,
     },
     SKU: {
       type: String,
@@ -33,7 +34,7 @@ const ItemSchema = new mongoose.Schema(
     status: {
       type: String,
       required: true,
-      enum: ['active','out-of-stock',],
+      enum: ['active', 'out-of-stock'],
       default: 'out-of-stock',
     },
     image_url: {
@@ -41,12 +42,15 @@ const ItemSchema = new mongoose.Schema(
     },
     stock_on_hand: {
       type: Number,
+      default: 0
     },
     available_stock: {
       type: Number,
+      default : 0
     },
     committed_stock: {
       type: Number,
+      default: 0
     },
   },
   { timestamps: true }
