@@ -16,7 +16,7 @@ const warehouseSchema = new mongoose.Schema(
     },
     warehouse_id: {
       type: String,
-      required:true,
+      required: true,
       trim: true,
     },
     status: {
@@ -46,7 +46,6 @@ const warehouseSchema = new mongoose.Schema(
 )
 
 warehouseSchema.pre('validate', async function (next) {
-  console.log("ekfs flskfnksdnfs")
   var count = await Warehouse.count()
   this.warehouse_id = `WH-${String(count).padStart(5, '0')}`
   next()
