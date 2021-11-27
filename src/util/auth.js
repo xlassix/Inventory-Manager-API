@@ -57,12 +57,11 @@ export const protect = async (req, res, next) => {
     )
     const user = await User.findById(data.id).select('-password').lean().exec()
     if (user) {
-      console.log(user)
       req.user = user
       next()
     }
   } catch (err) {
-    console.log(err)
+    console.log(err.message)
     return res.status(401).end()
   }
 }
@@ -82,7 +81,6 @@ export const onlyAuthorized = async (req, res, next) => {
     if (user) {
       var root_path = req.originalUrl.split('/')[1]
       req.user = user.toJSON()
-      console.log(req.method)
       switch (req.method) {
         case 'DELETE':
         case 'delete': 
