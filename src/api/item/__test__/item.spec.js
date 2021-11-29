@@ -14,8 +14,8 @@ describe('Item  model', () => {
       })
     }),
       test('SKU', () => {
-        const SKU = Item.schema.obj.SKU
-        expect(SKU).toEqual({
+        const sku = Item.schema.obj.sku
+        expect(sku).toEqual({
           type: String,
           required: true,
           trim: true,
@@ -48,11 +48,11 @@ describe('Item  model', () => {
           maxlength: 50,
         })
       }),
-      test('warehouseId', () => {
-        const warehouseId = Item.schema.obj.warehouseId
+      test('warehouse_id', () => {
+        const warehouseId = Item.schema.obj.warehouse_id
         expect(warehouseId).toEqual({
           type: mongoose.SchemaTypes.ObjectId,
-          ref: 'warehouseId',
+          ref: 'warehouse',
           required: true
         })
       })
