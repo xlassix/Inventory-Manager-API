@@ -30,6 +30,15 @@ const ItemSchema = new mongoose.Schema(
       type: String,
       trim: true,
       maxlength: 50,
+      enum: ['kg', 'lbs',"pcs","L"],
+      default: 'pcs',
+    },
+    currency: {
+      type: String,
+      trim: true,
+      maxlength: 5,
+      enum: ['₦', '$'],
+      default: '₦',
     },
     status: {
       type: String,
