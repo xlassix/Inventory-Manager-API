@@ -1,5 +1,5 @@
 import Joi from  "joi"
-import  AppError  from '../../util/error'
+import { SchemaValidator } from "../../util/validator";
 
 const schema = Joi.object({
     name: Joi.string().required(),
@@ -12,12 +12,4 @@ const options = {
     allowUnknown: true, // ignore unknown props
     stripUnknown: true // remove unknown props
 };
-export const createWarehouseSchemaValidator= (req, res, next)=> {
-    const { error, value } = schema.validate(req.body, options);
-    if (error) {
-        next(new AppError(error,406))
-    } else {
-        req.body = value;
-        next();
-    }
-}
+export const createWarehouseSchemaValidator= SchemaValidator(schema,options)

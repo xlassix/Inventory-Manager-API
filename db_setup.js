@@ -24,7 +24,7 @@ const createUser = async () => {
   var value = process.argv.slice(2)
   if (value.length < 1) {
     console.log(
-      'params required \n --first_name: first_name \n -last_name: last_name \n --phone: phone \n --email : email\n --password : password\n --role: role[]'
+      'params required \n --first_name: first_name \n --last_name: last_name \n --phone: phone \n --email : email\n --password : password\n --role: role[]'
     )
     process.exit(1)
   }
@@ -66,7 +66,8 @@ const initDB = async () => {
         purchase_order: 'Admin',
         user: 'Admin',
         user_role: 'Admin',
-        warehouse: "Admin"
+        warehouse: "Admin",
+        item: "Admin"
       },
       {
         title: 'Anonymous',

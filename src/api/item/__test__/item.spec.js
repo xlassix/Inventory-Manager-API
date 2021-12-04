@@ -46,6 +46,8 @@ describe('Item  model', () => {
           type: String,
           trim: true,
           maxlength: 50,
+          enum: ['kg', 'lbs',"pcs","L"],
+          default: 'pcs',
         })
       }),
       test('warehouse_id', () => {

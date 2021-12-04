@@ -15,6 +15,12 @@ const userRoleSchema = new mongoose.Schema(
       enum: ['None', 'Viewer',"Creator","Editor","Admin"],
       default: 'None',
     },
+    item:{
+      type: String,
+      required: true,
+      enum: ['None', 'Viewer',"Creator","Editor","Admin"],
+      default: 'None',
+    },
     user:{
       type: String,
       required: true,

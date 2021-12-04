@@ -6,7 +6,8 @@ import { connect } from './util/db'
 import  AppError  from './util/error'
 import errorHandler from './util/errorController'
 import device from 'express-device'
-import warehouseRouter from "./api/warehouse/warehouse.route"
+import WarehouseRouter from "./api/warehouse/warehouse.route"
+import ItemRouter from "./api/item/item.route"
 import {signin,protect,onlyAuthorized} from './util/auth'
 
 export const app = express()
@@ -21,8 +22,8 @@ app.use(express.urlencoded({ limit: '5mb', extended: true }))
 app.use(morgan('dev'))
 app.post("/signin",signin)
 
-app.use("/warehouse",onlyAuthorized,warehouseRouter)
-
+app.use("/warehouse",onlyAuthorized,WarehouseRouter)
+app.use("/item",onlyAuthorized,ItemRouter)
 
 app.use((req, res, next) => {
   let err = new AppError(
