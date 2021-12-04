@@ -35,6 +35,14 @@ const ItemSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    cost_price_per_unit: {
+      type: Number,
+      required: true,
+    },
+    selling_price_per_unit: {
+      type: Number,
+      required: true,
+    },
     currency: {
       type: String,
       trim: true,
