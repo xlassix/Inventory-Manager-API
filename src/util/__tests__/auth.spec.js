@@ -288,7 +288,7 @@ describe('Authentication:', () => {
         )
         const req = {
           method: 'GET',
-          path :"roles/s",
+          originalUrl: 'roles/s',
           headers: { authorization: `Bearer ${newToken(user)}` },
         }
         const res = {
@@ -303,169 +303,187 @@ describe('Authentication:', () => {
 
         await onlyAuthorized(req, res)
       }),
-    test('Test viewer User- Get', async () => {
-      expect.assertions(2)
+        test('Test viewer User- Get', async () => {
+          expect.assertions(2)
 
-      const role = await UserRole.create({ title: 'randomRole',user:"Viewer" })
-      const user = await User.createWithRole(
-        {
-          email: 'hello@hello.com',
-          password: '293jssh',
-          first_name: 'error',
-          last_name: 'hello',
-        },
-        'randomRole'
-      )
-      const req = {
-        method: 'GET',
-        path :"user",
-        headers: { authorization: `Bearer ${newToken(user)}` },
-      }
+          const role = await UserRole.create({
+            title: 'randomRole',
+            user: 'Viewer',
+          })
+          const user = await User.createWithRole(
+            {
+              email: 'hello@hello.com',
+              password: '293jssh',
+              first_name: 'error',
+              last_name: 'hello',
+            },
+            'randomRole'
+          )
+          const req = {
+            method: 'GET',
+            originalUrl: 'user/',
+            headers: { authorization: `Bearer ${newToken(user)}` },
+          }
 
-      const next = () => {}
-      await onlyAuthorized(req, {}, next)
-      expect(req.user._id.toString()).toBe(user._id.toString())
-      expect(req.user).not.toHaveProperty('password')
-    }),
-    test('Test viewer User-post', async () => {
-      expect.assertions(2)
+          const next = () => {}
+          await onlyAuthorized(req, {}, next)
+          expect(req.user._id.toString()).toBe(user._id.toString())
+          expect(req.user).not.toHaveProperty('password')
+        }),
+        test('Test viewer User-post', async () => {
+          expect.assertions(2)
 
-      const role = await UserRole.create({ title: 'randomRole',user:"Viewer" })
-      const user = await User.createWithRole(
-        {
-          email: 'hello@hello.com',
-          password: '293jssh',
-          first_name: 'error',
-          last_name: 'hello',
-        },
-        'randomRole'
-      )
-      const req = {
-        method: 'POST',
-        path :"user",
-        headers: { authorization: `Bearer ${newToken(user)}` },
-      }
-      const res = {
-        status(status) {
-          expect(status).toBe(401)
-          return this
-        },
-        end() {
-          expect(true).toBe(true)
-        },
-      }
-      await onlyAuthorized(req, res)
-    }),
-    test('Test viewer User-Delete', async () => {
-      expect.assertions(2)
+          const role = await UserRole.create({
+            title: 'randomRole',
+            user: 'Viewer',
+          })
+          const user = await User.createWithRole(
+            {
+              email: 'hello@hello.com',
+              password: '293jssh',
+              first_name: 'error',
+              last_name: 'hello',
+            },
+            'randomRole'
+          )
+          const req = {
+            method: 'POST',
+            originalUrl: 'user',
+            headers: { authorization: `Bearer ${newToken(user)}` },
+          }
+          const res = {
+            status(status) {
+              expect(status).toBe(401)
+              return this
+            },
+            end() {
+              expect(true).toBe(true)
+            },
+          }
+          await onlyAuthorized(req, res)
+        }),
+        test('Test viewer User-Delete', async () => {
+          expect.assertions(2)
 
-      const role = await UserRole.create({ title: 'randomRole',user:"Viewer" })
-      const user = await User.createWithRole(
-        {
-          email: 'hello@hello.com',
-          password: '293jssh',
-          first_name: 'error',
-          last_name: 'hello',
-        },
-        'randomRole'
-      )
-      const req = {
-        method: 'DELETE',
-        path :"user",
-        headers: { authorization: `Bearer ${newToken(user)}` },
-      }
-      const res = {
-        status(status) {
-          expect(status).toBe(401)
-          return this
-        },
-        end() {
-          expect(true).toBe(true)
-        },
-      }
-      await onlyAuthorized(req, res)
-    }),
-    test('Test Creator User-Delete', async () => {
-      expect.assertions(2)
+          const role = await UserRole.create({
+            title: 'randomRole',
+            user: 'Viewer',
+          })
+          const user = await User.createWithRole(
+            {
+              email: 'hello@hello.com',
+              password: '293jssh',
+              first_name: 'error',
+              last_name: 'hello',
+            },
+            'randomRole'
+          )
+          const req = {
+            method: 'DELETE',
+            originalUrl: 'user',
+            headers: { authorization: `Bearer ${newToken(user)}` },
+          }
+          const res = {
+            status(status) {
+              expect(status).toBe(401)
+              return this
+            },
+            end() {
+              expect(true).toBe(true)
+            },
+          }
+          await onlyAuthorized(req, res)
+        }),
+        test('Test Creator User-Delete', async () => {
+          expect.assertions(2)
 
-      const role = await UserRole.create({ title: 'randomRole',user:"Creator" })
-      const user = await User.createWithRole(
-        {
-          email: 'hello@hello.com',
-          password: '293jssh',
-          first_name: 'error',
-          last_name: 'hello',
-        },
-        'randomRole'
-      )
-      const req = {
-        method: 'DELETE',
-        path :"user",
-        headers: { authorization: `Bearer ${newToken(user)}` },
-      }
-      const res = {
-        status(status) {
-          expect(status).toBe(401)
-          return this
-        },
-        end() {
-          expect(true).toBe(true)
-        },
-      }
-      await onlyAuthorized(req, res)
-    }),
-    test('Test Creator  User- Edit', async () => {
-      expect.assertions(2)
+          const role = await UserRole.create({
+            title: 'randomRole',
+            user: 'Creator',
+          })
+          const user = await User.createWithRole(
+            {
+              email: 'hello@hello.com',
+              password: '293jssh',
+              first_name: 'error',
+              last_name: 'hello',
+            },
+            'randomRole'
+          )
+          const req = {
+            method: 'DELETE',
+            originalUrl: 'user',
+            headers: { authorization: `Bearer ${newToken(user)}` },
+          }
+          const res = {
+            status(status) {
+              expect(status).toBe(401)
+              return this
+            },
+            end() {
+              expect(true).toBe(true)
+            },
+          }
+          await onlyAuthorized(req, res)
+        }),
+        test('Test Creator  User- Edit', async () => {
+          expect.assertions(2)
 
-      const role = await UserRole.create({ title: 'randomRole',user:"Creator" })
-      const user = await User.createWithRole(
-        {
-          email: 'hello@hello.com',
-          password: '293jssh',
-          first_name: 'error',
-          last_name: 'hello',
-        },
-        'randomRole'
-      )
-      const req = {
-        method: 'PUT',
-        path :"user",
-        headers: { authorization: `Bearer ${newToken(user)}` },
-      }
-      const res = {
-        status(status) {
-          expect(status).toBe(401)
-          return this
-        },
-        end() {
-          expect(true).toBe(true)
-        },
-      }
-      await onlyAuthorized(req, res)
-    }),
-    test('Test Admin  User- Edit', async () => {
-      expect.assertions(2)
+          const role = await UserRole.create({
+            title: 'randomRole',
+            user: 'Creator',
+          })
+          const user = await User.createWithRole(
+            {
+              email: 'hello@hello.com',
+              password: '293jssh',
+              first_name: 'error',
+              last_name: 'hello',
+            },
+            'randomRole'
+          )
+          const req = {
+            method: 'PUT',
+            originalUrl: 'user',
+            headers: { authorization: `Bearer ${newToken(user)}` },
+          }
+          const res = {
+            status(status) {
+              expect(status).toBe(401)
+              return this
+            },
+            end() {
+              expect(true).toBe(true)
+            },
+          }
+          await onlyAuthorized(req, res)
+        }),
+        test('Test Admin  User- Edit', async () => {
+          expect.assertions(2)
 
-      const role = await UserRole.create({ title: 'randomRole',user:"Admin" })
-      const user = await User.createWithRole(
-        {
-          email: 'hello@hello.com',
-          password: '293jssh',
-          first_name: 'error',
-          last_name: 'hello',
-        },
-        'randomRole'
-      )
-      const req = {
-        method: 'PUT',
-        path :"user",
-        headers: { authorization: `Bearer ${newToken(user)}` },
-      }
+          const role = await UserRole.create({
+            title: 'randomRole',
+            user: 'Admin',
+          })
+          const user = await User.createWithRole(
+            {
+              email: 'hello@hello.com',
+              password: '293jssh',
+              first_name: 'error',
+              last_name: 'hello',
+            },
+            'randomRole'
+          )
+          const req = {
+            method: 'PUT',
+            originalUrl: 'user',
+            headers: { authorization: `Bearer ${newToken(user)}` },
+          }
 
-      const next = () => {}
-      await onlyAuthorized(req, {}, next)
-      expect(req.user._id.toString()).toBe(user._id.toString())
-      expect(req.user).not.toHaveProperty('password')
+          const next = () => {}
+          await onlyAuthorized(req, {}, next)
+          expect(req.user._id.toString()).toBe(user._id.toString())
+          expect(req.user).not.toHaveProperty('password')
+        })
     })
-  })
 })

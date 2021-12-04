@@ -78,8 +78,8 @@ export const onlyAuthorized = async (req, res, next) => {
     )
     const user = await User.findById(data.id).select('-password').exec()
     if (user) {
-      var root_path = req.originalUrl.split('/')[1]
       req.user = user.toJSON()
+      var root_path = req.originalUrl.split('/').filter(elem=>elem!=="")[0]
       switch (req.method) {
         case 'DELETE':
         case 'delete': 

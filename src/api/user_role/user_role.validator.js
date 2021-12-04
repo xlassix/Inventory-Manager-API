@@ -1,4 +1,5 @@
 import Joi from 'joi'
+import { SchemaValidator } from '../../util/validator'
 
 const schema = Joi.object({
   title: Joi.string('None', 'Viewer', 'Creator', 'Editor', 'Admin').required(),
@@ -19,13 +20,4 @@ const options = {
   allowUnknown: true,
 }
 
-export const createUserRoleSchemaValidator = (req, res, next) => {
-  const { error, value } = schema.validate(req.body, options)
-
-  if (error) {
-    next(`Validation error: ${error.details.map((x) => x.message).join(', ')}`)
-  } else {
-    req.body = value
-    next()
-  }
-}
+export const createUserRoleSchemaValidator = SchemaValidator(schema,options);

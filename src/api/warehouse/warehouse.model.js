@@ -47,7 +47,7 @@ const warehouseSchema = new mongoose.Schema(
 
 warehouseSchema.pre('validate', async function (next) {
   var count = await Warehouse.count()
-  this.warehouse_id = `WH-${String(count).padStart(5, '0')}`
+  this.warehouse_id = `WH-${String(count+1).padStart(5, '0')}`
   next()
 })
 

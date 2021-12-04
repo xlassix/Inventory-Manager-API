@@ -10,14 +10,12 @@ describe('Item  model', () => {
         required: true,
         trim: true,
         maxlength: 50,
-        unique: true,
       })
     }),
       test('SKU', () => {
-        const SKU = Item.schema.obj.SKU
-        expect(SKU).toEqual({
+        const sku = Item.schema.obj.sku
+        expect(sku).toEqual({
           type: String,
-          required: true,
           trim: true,
           maxlength: 50,
           unique: true,
@@ -46,14 +44,16 @@ describe('Item  model', () => {
           type: String,
           trim: true,
           maxlength: 50,
+          enum: ['kg', 'lbs', 'pcs', 'l', 'ml', 'cl'],
+          default: 'pcs',
         })
       }),
-      test('warehouseId', () => {
-        const warehouseId = Item.schema.obj.warehouseId
+      test('warehouse_id', () => {
+        const warehouseId = Item.schema.obj.warehouse_id
         expect(warehouseId).toEqual({
           type: mongoose.SchemaTypes.ObjectId,
-          ref: 'warehouseId',
-          required: true
+          ref: 'warehouse',
+          required: true,
         })
       })
   })
