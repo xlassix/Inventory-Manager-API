@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import controllers from './item.controller'
-import {createItemSchemaValidator} from "./item.validator"
+import {createItemSchemaValidator,updateItemSchemaValidator} from "./item.validator"
 
 const router = Router()
 
@@ -12,7 +12,7 @@ router
 router
   .route('/:id')
   .get(controllers.getOne)
-  .put(controllers.updateOne)
+  .put(updateItemSchemaValidator, controllers.updateOne)
   .delete(controllers.removeOne)
 
 export default router
