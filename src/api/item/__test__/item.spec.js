@@ -57,25 +57,27 @@ describe('Item  model', () => {
         })
       })
   }),
-  describe('Item Model', () => {
-
-    test('Create Item without warehouseId', async() => {
-      expect.assertions(2)
-      try{    
-        await Item.create({
-        "name": "Hair cream3",
-        "image_url": "https://www.newfoodmagazine.com/wp-content/uploads/food-packaging-1-750x450.jpg",
-        "type": "Beauty",
-        "currency":"$",
-        "unit":"ml",
-        "quantity_per_unit":850,
-        "cost_price_per_unit":20,
-        "selling_price_per_unit":24
+    describe('Item Model', () => {
+      test('Create Item without warehouseId', async () => {
+        expect.assertions(2)
+        try {
+          await Item.create({
+            name: 'Hair cream3',
+            image_url:
+              'https://www.newfoodmagazine.com/wp-content/uploads/food-packaging-1-750x450.jpg',
+            type: 'Beauty',
+            currency: '$',
+            unit: 'ml',
+            quantity_per_unit: 850,
+            cost_price_per_unit: 20,
+            selling_price_per_unit: 24,
+          })
+        } catch (e) {
+          expect(e.name).toBe('ValidationError')
+          expect(e.message).toContain(
+            'item validation failed: warehouse_id: Path `warehouse_id` is required'
+          )
+        }
       })
-    }catch(e){
-      expect(e.name).toBe("ValidationError");
-      expect(e.message).toContain("item validation failed: warehouse_id: Path `warehouse_id` is required");
-    }
-  })
-  })
+    })
 })
