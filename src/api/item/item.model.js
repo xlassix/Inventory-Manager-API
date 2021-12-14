@@ -82,9 +82,9 @@ ItemSchema.index({ sku: 1, warehouseId: 1 }, { unique: true })
 ItemSchema.plugin(mg_autopopulate)
 ItemSchema.pre('save', async function (next) {
   if (this.isNew) {
-  const doc = await Item.findOne({ name: this.name}).lean().exec()
+  const doc = await Item.findOne({ name: this.name,warehouse_id: this.warehouse_id}).populate('warehouse_id').exec()
   if(doc){
-    next(new Error(`item : ${this.name} already exit in this warehouse`))
+    next(new Error(`item : ${this.name} already exit in ${doc.warehouse_id.name}[${doc.warehouse_id.warehouse_id}] warehouse`))
   }
   var count = await Item.distinct('sku').count().exec()
   this.sku = `SKU-${String(count + 1).padStart(5, '0')}`
