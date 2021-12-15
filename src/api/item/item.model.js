@@ -17,7 +17,6 @@ const ItemSchema = new mongoose.Schema(
       type: String,
       trim: true,
       maxlength: 50,
-      unique: true,
     },
     type: {
       type: String,
@@ -78,16 +77,31 @@ const ItemSchema = new mongoose.Schema(
   },
   { timestamps: true }
 )
-ItemSchema.index({ sku: 1, warehouseId: 1 }, { unique: true })
+ItemSchema.index({ sku: 1, warehouse_id: 1 }, { unique: true })
 ItemSchema.plugin(mg_autopopulate)
 ItemSchema.pre('save', async function (next) {
   if (this.isNew) {
-  const doc = await Item.findOne({ name: this.name,warehouse_id: this.warehouse_id}).populate('warehouse_id').exec()
-  if(doc){
-    next(new Error(`item : ${this.name} already exit in ${doc.warehouse_id.name}[${doc.warehouse_id.warehouse_id}] warehouse`))
-  }
-  var count = await Item.distinct('sku').count().exec()
-  this.sku = `SKU-${String(count + 1).padStart(5, '0')}`
+    const docs = await Item.find({ name: this.name })
+      .populate('warehouse_id')
+      .lean()
+      .exec()
+    const doc = docs.filter((elem) => {
+      return elem.warehouse_id._id.toString() === this.warehouse_id.toString()
+    })[0]
+    console.log(doc)
+    if (doc) {
+      next(
+        new Error(
+          `item : ${this.name} already exit in ${doc.warehouse_id.name}[${doc.warehouse_id.warehouse_id}] warehouse`
+        )
+      )
+    }
+    if(docs.length>0){
+      this.sku = docs[0].sku
+    }else{
+    var count = await Item.distinct('sku').count().exec()
+    this.sku = `SKU-${String(count + 1).padStart(5, '0')}`
+    }
   }
   next()
 })
