@@ -20,11 +20,10 @@ const purchaseOrderSchema = new mongoose.Schema(
       trim: true,
       maxlength: 50,
     },
-    email: {
+    vendor_email: {
       type: String,
       trim: true,
       maxlength: 50,
-      unique: true,
     },
     status: {
       type: String,
@@ -41,7 +40,7 @@ const purchaseOrderSchema = new mongoose.Schema(
     total_value_paid: {
       type: Number,
     },
-    warehouseId: {
+    warehouse_id: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'warehouse',
     },
@@ -65,12 +64,12 @@ purchaseOrderSchema.plugin(mg_autopopulate)
 
 const purchaseOrderItemSchema = new mongoose.Schema(
   {
-    purchase: {
+    purchaseorder_id: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'purchase_order',
       required: true,
     },
-    itemId: {
+    item_id: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'item',
     },
@@ -91,13 +90,10 @@ const purchaseOrderItemSchema = new mongoose.Schema(
     rate_on_delivery: {
       type: Number,
     },
-    amount_paid: {
-      type: Number,
-    },
   },
   { timestamps: true }
 )
-purchaseOrderItemSchema.index({ purchase: 1, itemId: 1 }, { unique: true })
+purchaseOrderItemSchema.index({ purchaseorder_id: 1, item_id: 1 }, { unique: true })
 
 export const PurchaseOrder = mongoose.model(
   'purchase_order',
