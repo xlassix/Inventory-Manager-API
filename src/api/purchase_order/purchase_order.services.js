@@ -27,7 +27,7 @@ export const getPurchaseOrder = (limit=20) => {
   }
 }
 
-export const createOne = (model) => async (req, res, next) => {
+export const createPurchaseorder = async (req, res, next) => {
   const createdBy = req.user._id
   try {
     const doc = await model.create({ ...req.body, createdBy })

@@ -15,6 +15,11 @@ const purchaseOrderSchema = new mongoose.Schema(
       trim: true,
       maxlength: 50,
     },
+    purchaseorder_number: {
+      type: String,
+      trim: true,
+      maxlength: 50,
+    },
     email: {
       type: String,
       trim: true,
@@ -24,7 +29,7 @@ const purchaseOrderSchema = new mongoose.Schema(
     status: {
       type: String,
       required: true,
-      enum: ['placed', 'awaiting',"incomplete","complete"],
+      enum: ['placed', 'awaiting', 'incomplete', 'complete'],
       default: 'placed',
     },
     total_value_requested: {
@@ -75,24 +80,24 @@ const purchaseOrderItemSchema = new mongoose.Schema(
       required: true,
     },
     quantity_request: {
-      type: Number
+      type: Number,
     },
     quantity_delivered: {
-      type: Number
+      type: Number,
     },
     rate_on_request: {
-      type: Number
+      type: Number,
     },
     rate_on_delivery: {
-      type: Number
+      type: Number,
     },
     amount_paid: {
-      type: Number
+      type: Number,
     },
   },
   { timestamps: true }
 )
-purchaseOrderItemSchema.index({purchase:1,itemId:1},{unique:true})
+purchaseOrderItemSchema.index({ purchase: 1, itemId: 1 }, { unique: true })
 
 export const PurchaseOrder = mongoose.model(
   'purchase_order',
