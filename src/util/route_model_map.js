@@ -3,4 +3,5 @@ export const routeModelMap = {
   role: 'user_role',
   warehouse: 'warehouse',
   item: 'item',
+  "purchaseorders":"purchase_order"
 }
