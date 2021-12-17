@@ -6,15 +6,13 @@ const router = Router()
 
 router
   .route('/')
-  .get(controllers.getMany)
-  .post(createPurchaseOrderSchemaValidator, controllers.createOne)
-  .all(controllers.rejectRequest)
+  .post(createPurchaseOrderSchemaValidator,controllers.createOne)
 
-router
-  .route('/:id')
-  .get(controllers.getOne)
-  .put(controllers.updateOne)
-  .delete(controllers.removeOne)
-  .all(controllers.rejectRequest)
+// router
+//   .route('/:id')
+//   .get(controllers.getOne)
+//   .put(controllers.updateOne)
+//   .delete(controllers.removeOne)
+//   .all(controllers.rejectRequest)
 
 export default router

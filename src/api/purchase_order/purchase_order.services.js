@@ -15,7 +15,7 @@ export const getPurchaseOrder_byId  = async (id) => {
   }
 }
 
-export const getPurchaseOrder = (limit=20) => {
+export const getPurchaseOrder = async(limit=20) => {
   try {
     const docs = await model.find().sort({_id: -1})
     .limit(limit).lean().exec()
@@ -27,28 +27,10 @@ export const getPurchaseOrder = (limit=20) => {
   }
 }
 
-export const createPurchaseorder = async (req, res, next) => {
-  const createdBy = req.user._id
-  try {
-    const doc = await model.create({ ...req.body, createdBy })
-    res.status(201).json({ data: doc })
-  } catch (e) {
-    console.error(e.message)
-    if (e.message.includes('duplicate')) {
-      next(
-        new AppError(
-          `the values ${Object.values(
-            e.keyValue
-          )} already exist at ${Object.keys(e.keyValue)}`,
-          406
-        )
-      )
-    }
-    if (e.message) {
-      next(new AppError(e.message, 406))
-    }
-    res.status(400).end()
-  }
+export const createPurchaseorderService = async (body) => {
+    const doc = await PurchaseOrder.create(body)
+    console.log("excured")
+    return doc
 }
 
 export const updateOne = (model) => async (req, res) => {

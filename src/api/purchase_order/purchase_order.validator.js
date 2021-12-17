@@ -3,13 +3,13 @@ import { SchemaValidator } from "../../util/validator";
 
 const purchaseOrderItemSchema = Joi.object({
     item_id: Joi.string().required(),
-    quantity: Joi.string().min(0).required(),
+    quantity: Joi.number().min(0).required(),
     rate: Joi.number().min(0),
 });
 const purchaseOrderSchema = Joi.object({
-    item: Joi.array().items(purchaseOrderItemSchema).min(1).required(),
+    items: Joi.array().items(purchaseOrderItemSchema).min(1).required(),
     warehouse_id: Joi.string().required(),
-    vendor_phone: Joi.string().required(),
+    vendor_phone: Joi.number().required(),
     vendor_name: Joi.string().required(),
     vendor_email: Joi.string(),
 });
