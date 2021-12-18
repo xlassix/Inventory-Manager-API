@@ -65,7 +65,7 @@ const purchaseOrderSchema = new mongoose.Schema(
     status: {
       type: String,
       required: true,
-      enum: ['placed', 'awaiting', 'incomplete', 'complete'],
+      enum: ['placed', 'invoiced', 'incomplete', 'complete',"cancelled"],
       default: 'placed',
     },
     total_value_requested: {

@@ -1,4 +1,4 @@
-import {createPurchaseorderService} from "./purchase_order.services"
+import {createPurchaseorderService,changeStatusPurchaseorderService  } from "./purchase_order.services"
 import AppError from '../../util/error'
 import { crudControllers } from '../../util/crud'
 import { PurchaseOrder } from './purchase_order.model'
@@ -17,6 +17,16 @@ const createPurchase = async(req,res,next)=>{
         return res.status(201).json(result)
     }catch(e){
         return next(new AppError(e.message,406))
+    }
+}
+
+const changePurchaseStatus = async(req,res,next)=>{
+    const data= req.body.status
+    try{
+        result= await changeStatusPurchaseorderService(data)
+        return res.status(201).json(result)
+    }catch(e){
+        return next(new AppError(e.message,400))
     }
 }
 

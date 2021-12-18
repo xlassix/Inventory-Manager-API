@@ -13,9 +13,18 @@ const purchaseOrderSchema = Joi.object({
     vendor_name: Joi.string().required(),
     vendor_email: Joi.string(),
 });
+const chanagePurchaseOrderSchema = Joi.object({
+    status: Joi.string().required(),
+});
+const InvoicePurchaseOrderSchema = Joi.object({
+    invoice_id: Joi.string().required(),
+    amount: Joi.number().required(),
+});
 const options = {
     abortEarly: false, // include all errors
     allowUnknown: true, // ignore unknown props
     stripUnknown: true // remove unknown props
 };
 export const createPurchaseOrderSchemaValidator= SchemaValidator(purchaseOrderSchema,options)
+export const updateStatusPurchaseOrderSchemaValidator= SchemaValidator(chanagePurchaseOrderSchema,options)
+export const invoicePurchaseOrderSchemaValidator= SchemaValidator(InvoicePurchaseOrderSchema,options)
