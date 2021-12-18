@@ -1,4 +1,4 @@
-import {createPurchaseorderService,changeStatusPurchaseorderService  } from "./purchase_order.services"
+import {createPurchaseorderService,invoicePurchaseorderService  } from "./purchase_order.services"
 import AppError from '../../util/error'
 import { crudControllers } from '../../util/crud'
 import { PurchaseOrder } from './purchase_order.model'
@@ -9,7 +9,6 @@ const createPurchase = async(req,res,next)=>{
     const user_id= req.user._id
     const data= req.body
     data['createdBy']=user_id
-    console.log(data["items"])
     data["related_items"]=data["items"]
     var result;
     try{
@@ -20,11 +19,11 @@ const createPurchase = async(req,res,next)=>{
     }
 }
 
-const changePurchaseStatus = async(req,res,next)=>{
-    const data= req.body.status
+const invoicePurchaseStatus = async(req,res,next)=>{
+    const data= req.body.amount
     try{
-        result= await changeStatusPurchaseorderService(data)
-        return res.status(201).json(result)
+        result= await invoicePurchaseorderService(req.params.id,data)
+        return res.status(200).json(result)
     }catch(e){
         return next(new AppError(e.message,400))
     }
@@ -33,6 +32,7 @@ const changePurchaseStatus = async(req,res,next)=>{
 const CustomControllers = {
     ...defaultController,
     createOne: createPurchase,
+    invoice:invoicePurchaseStatus
 }
 
 export default CustomControllers

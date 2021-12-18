@@ -7,6 +7,7 @@ const router = Router()
 router
   .route('/')
   .post(createPurchaseOrderSchemaValidator, controllers.createOne)
+  .get(controllers.getMany)
 
 router
   .route('/:id')
@@ -19,5 +20,5 @@ router
   .put(updateStatusPurchaseOrderSchemaValidator, controllers.updateOne)
 router
   .route('/:id/invoice')
-  .put(updateStatusPurchaseOrderSchemaValidator, controllers.updateOne)
+  .put(updateStatusPurchaseOrderSchemaValidator, controllers.invoice)
 export default router

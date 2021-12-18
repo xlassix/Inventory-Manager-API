@@ -99,15 +99,14 @@ purchaseOrderSchema.pre('validate', async function (next) {
       elem.sku=elem.item_id.sku
       elem.rate_on_request=elem.item_id.cost_price_per_unit
       assert.equal(this.warehouse_id.toString(),elem.item_id.warehouse_id.toString(),`item:${elem.sku} doesnt belong to this warehouse`)
+      elem.item_id=elem.item_id._id
       return elem
     })
-    console.log(this.related_items[0])
   }
   next()
 })
 purchaseOrderItemSchema.pre('validate', async function (next) {
   if (this.isNew) {
-    console.log(this)
   }
   next()
 })
