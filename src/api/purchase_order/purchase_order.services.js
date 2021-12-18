@@ -1,5 +1,5 @@
 import AppError from '../../util/error'
-import { PurchaseOrder,PurchaseOrderItem } from './purchase_order.model'
+import { PurchaseOrder } from './purchase_order.model'
 
 export const getPurchaseOrder_byId  = async (id) => {
   try {
@@ -28,9 +28,7 @@ export const getPurchaseOrder = async(limit=20) => {
 }
 
 export const createPurchaseorderService = async (body) => {
-    const doc = await PurchaseOrder.create(body)
-    console.log("excured")
-    return doc
+  const doc = await PurchaseOrder.create(body)
 }
 
 export const updateOne = (model) => async (req, res) => {

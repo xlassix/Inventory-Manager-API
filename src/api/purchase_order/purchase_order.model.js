@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 import mg_autopopulate from 'mongoose-autopopulate'
-
+import assert from 'assert';
 
 const purchaseOrderItemSchema = new mongoose.Schema(
   {
@@ -13,12 +13,12 @@ const purchaseOrderItemSchema = new mongoose.Schema(
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'item',
     },
-    SKU: {
+    sku: {
       type: String,
       trim: true,
       required: true,
     },
-    quantity_request: {
+    quantity: {
       type: Number,
     },
     quantity_delivered: {
@@ -33,7 +33,10 @@ const purchaseOrderItemSchema = new mongoose.Schema(
   },
   { timestamps: true }
 )
-purchaseOrderItemSchema.index({ purchaseorder_id: 1, item_id: 1 }, { unique: true })
+purchaseOrderItemSchema.index(
+  { purchaseorder_id: 1, item_id: 1 },
+  { unique: true }
+)
 
 const purchaseOrderSchema = new mongoose.Schema(
   {
@@ -88,29 +91,28 @@ const purchaseOrderSchema = new mongoose.Schema(
 )
 purchaseOrderSchema.plugin(mg_autopopulate)
 
-purchaseOrderSchema.pre('validate',async function(next) {
+purchaseOrderSchema.pre('validate', async function (next) {
   if (this.isNew) {
-  const data=(await this.populate("related_items.item_id"))
-  this.related_items=this.related_items.map(elem=>{
-    elem.purchaseorder_id=data._id
-    return elem
-  })
-  console.log(this.related_items[0]);
+    const data = await this.populate('related_items.item_id')
+    this.related_items = this.related_items.map((elem) => {
+      elem.purchaseorder_id = data._id
+      elem.sku=elem.item_id.sku
+      elem.rate_on_request=elem.item_id.cost_price_per_unit
+      assert.equal(this.warehouse_id.toString(),elem.item_id.warehouse_id.toString(),`item:${elem.sku} doesnt belong to this warehouse`)
+      return elem
+    })
+    console.log(this.related_items[0])
   }
-  next();
-});
-purchaseOrderItemSchema.pre('validate',async function(next) {
+  next()
+})
+purchaseOrderItemSchema.pre('validate', async function (next) {
   if (this.isNew) {
-  console.log(await this.populate('item_id'))
+    console.log(this)
   }
-  next();
-});
+  next()
+})
 
 export const PurchaseOrder = mongoose.model(
   'purchase_order',
   purchaseOrderSchema
-)
-export const PurchaseOrderItem = mongoose.model(
-  'purchase_order_item',
-  purchaseOrderItemSchema
 )

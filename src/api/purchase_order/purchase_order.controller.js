@@ -1,5 +1,9 @@
 import {createPurchaseorderService} from "./purchase_order.services"
 import AppError from '../../util/error'
+import { crudControllers } from '../../util/crud'
+import { PurchaseOrder } from './purchase_order.model'
+
+const defaultController = crudControllers(PurchaseOrder)
 
 const createPurchase = async(req,res,next)=>{
     const user_id= req.user._id
@@ -9,17 +13,15 @@ const createPurchase = async(req,res,next)=>{
     data["related_items"]=data["items"]
     var result;
     try{
-        result=createPurchaseorderService(data)
-        console.log("dayd")
+        result= await createPurchaseorderService(data)
         return res.status(201).json(result)
     }catch(e){
-        console.log("message \t",e.message)
         return next(new AppError(e.message,406))
     }
-    
 }
 
 const CustomControllers = {
+    ...defaultController,
     createOne: createPurchase,
 }
 
