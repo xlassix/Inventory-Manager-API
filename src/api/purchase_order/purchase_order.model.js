@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 import mg_autopopulate from 'mongoose-autopopulate'
-import assert from 'assert';
+import assert from 'assert'
 
 const purchaseOrderItemSchema = new mongoose.Schema(
   {
@@ -65,7 +65,7 @@ const purchaseOrderSchema = new mongoose.Schema(
     status: {
       type: String,
       required: true,
-      enum: ['placed', 'invoiced', 'incomplete', 'complete',"cancelled"],
+      enum: ['placed', 'invoiced', 'incomplete', 'complete', 'cancelled'],
       default: 'placed',
     },
     total_value_requested: {
@@ -96,10 +96,14 @@ purchaseOrderSchema.pre('validate', async function (next) {
     const data = await this.populate('related_items.item_id')
     this.related_items = this.related_items.map((elem) => {
       elem.purchaseorder_id = data._id
-      elem.sku=elem.item_id.sku
-      elem.rate_on_request=elem.item_id.cost_price_per_unit
-      assert.equal(this.warehouse_id.toString(),elem.item_id.warehouse_id.toString(),`item:${elem.sku} doesnt belong to this warehouse`)
-      elem.item_id=elem.item_id._id
+      elem.sku = elem.item_id.sku
+      elem.rate_on_request = elem.item_id.cost_price_per_unit
+      assert.equal(
+        this.warehouse_id.toString(),
+        elem.item_id.warehouse_id.toString(),
+        `item:${elem.sku} doesnt belong to this warehouse`
+      )
+      elem.item_id = elem.item_id._id
       return elem
     })
   }
