@@ -1,6 +1,10 @@
 import { Router } from 'express'
 import controllers from './purchase_order.controller'
-import { createPurchaseOrderSchemaValidator,updateStatusPurchaseOrderSchemaValidator,invoicePurchaseOrderSchemaValidator } from './purchase_order.validator'
+import {
+  createPurchaseOrderSchemaValidator,
+  updateStatusPurchaseOrderSchemaValidator,
+  invoicePurchaseOrderSchemaValidator,
+} from './purchase_order.validator'
 
 const router = Router()
 
@@ -20,5 +24,5 @@ router
   .put(updateStatusPurchaseOrderSchemaValidator, controllers.updateOne)
 router
   .route('/:id/invoice')
-  .put(updateStatusPurchaseOrderSchemaValidator, controllers.invoice)
+  .put(invoicePurchaseOrderSchemaValidator, controllers.invoice)
 export default router
