@@ -1,5 +1,5 @@
 import { PurchaseOrder, PurchaseOrderItem } from '../purchase_order.model'
-import mongoose  from "mongoose"
+import mongoose from 'mongoose'
 
 describe('Purchase Order model', () => {
   describe('PurchaseOrderSchema', () => {
