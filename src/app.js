@@ -8,6 +8,7 @@ import errorHandler from './util/errorController'
 import device from 'express-device'
 import WarehouseRouter from "./api/warehouse/warehouse.route"
 import ItemRouter from "./api/item/item.route"
+import PurchaseOrderRouter from "./api/purchase_order/purchase_order.route"
 import {signin,protect,onlyAuthorized} from './util/auth'
 
 export const app = express()
@@ -24,6 +25,7 @@ app.post("/signin",signin)
 
 app.use("/warehouse",onlyAuthorized,WarehouseRouter)
 app.use("/item",onlyAuthorized,ItemRouter)
+app.use("/purchaseorders",onlyAuthorized,PurchaseOrderRouter)
 
 app.use((req, res, next) => {
   let err = new AppError(

@@ -1,7 +1,7 @@
 import config from '../config'
 import { User } from '../api/user/user.model'
-import { routeModelMap } from './route_model_map'
 import jwt from 'jsonwebtoken'
+const { permission_maps }= config
 
 export const newToken = (user) => {
   return jwt.sign({ id: user.id }, config.secrets.jwt, {
@@ -83,14 +83,14 @@ export const onlyAuthorized = async (req, res, next) => {
       switch (req.method) {
         case 'DELETE':
         case 'delete': 
-          if (req.user.role[routeModelMap[root_path]] == 'Admin') {
+          if (req.user.role[permission_maps[root_path]] == 'Admin') {
             return next()
           }
           break
         case 'PUT':
         case 'put':
           if (
-            ['Admin', 'Editor'].includes(req.user.role[routeModelMap[root_path]])
+            ['Admin', 'Editor'].includes(req.user.role[permission_maps[root_path]])
           ) {
             return next()
           }
@@ -98,7 +98,7 @@ export const onlyAuthorized = async (req, res, next) => {
         case 'POST':
         case 'post':
           if (
-            ['Admin', 'Editor','Creator'].includes(req.user.role[routeModelMap[root_path]])
+            ['Admin', 'Editor','Creator'].includes(req.user.role[permission_maps[root_path]])
           ) {
             return next()
           }
@@ -106,7 +106,7 @@ export const onlyAuthorized = async (req, res, next) => {
         case 'GET':
         case 'get':
             if (
-              ['Admin', 'Editor','Creator','Viewer'].includes(req.user.role[routeModelMap[root_path]])
+              ['Admin', 'Editor','Creator','Viewer'].includes(req.user.role[permission_maps[root_path]])
             ) {
               return next()
             }
