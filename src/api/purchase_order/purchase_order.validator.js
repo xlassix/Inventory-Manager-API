@@ -13,6 +13,23 @@ const purchaseOrderSchema = Joi.object({
   vendor_name: Joi.string().required(),
   vendor_email: Joi.string(),
 })
+
+const editPurchaseOrderItemSchema = Joi.object({
+  id:Joi.string().required(),
+  quantity: Joi.number().min(0),
+  rate: Joi.number().min(0),
+})
+
+const editPurchaseOrderSchema = Joi.object({
+  vendor_phone: Joi.number(),
+  vendor_email: Joi.string(),
+  items: Joi.array().items(editPurchaseOrderItemSchema).min(1)
+})
+
+const deliveryPurchaseOrderSchema = Joi.object({
+  items: Joi.array().items(purchaseOrderItemSchema).min(1).required(),
+})
+
 const chanagePurchaseOrderSchema = Joi.object({
   status: Joi.string().required(),
 })
@@ -35,5 +52,14 @@ export const updateStatusPurchaseOrderSchemaValidator = SchemaValidator(
 )
 export const invoicePurchaseOrderSchemaValidator = SchemaValidator(
   InvoicePurchaseOrderSchema,
+  options
+)
+export const editPurchaseOrderSchemaValidator = SchemaValidator(
+  editPurchaseOrderSchema,
+  options
+)
+
+export const deliveryPurchaseOrderSchemaValidator = SchemaValidator(
+  deliveryPurchaseOrderSchema,
   options
 )

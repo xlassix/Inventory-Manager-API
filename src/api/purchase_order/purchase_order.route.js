@@ -4,6 +4,8 @@ import {
   createPurchaseOrderSchemaValidator,
   updateStatusPurchaseOrderSchemaValidator,
   invoicePurchaseOrderSchemaValidator,
+  deliveryPurchaseOrderSchemaValidator,
+  editPurchaseOrderSchemaValidator,
 } from './purchase_order.validator'
 
 const router = Router()
@@ -16,7 +18,7 @@ router
 router
   .route('/:id')
   .get(controllers.getOne)
-  .put(controllers.updateOne)
+  .put(editPurchaseOrderSchemaValidator, controllers.updateOne)
   .delete(controllers.removeOne)
 
 router
@@ -25,4 +27,5 @@ router
 router
   .route('/:id/invoice')
   .put(invoicePurchaseOrderSchemaValidator, controllers.invoice)
+  
 export default router

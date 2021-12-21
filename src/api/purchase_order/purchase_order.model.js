@@ -1,6 +1,7 @@
 import mongoose from 'mongoose'
 import mg_autopopulate from 'mongoose-autopopulate'
 import assert from 'assert'
+import { AssertionError } from 'assert/strict'
 
 const purchaseOrderItemSchema = new mongoose.Schema(
   {
@@ -98,6 +99,7 @@ purchaseOrderSchema.pre('validate', async function (next) {
       elem.purchaseorder_id = data._id
       elem.sku = elem.item_id.sku
       elem.rate_on_request = elem.item_id.cost_price_per_unit
+      assert.notEqual(undefined,this.warehouse_id,"Invalid warehouse_id")
       assert.equal(
         this.warehouse_id.toString(),
         elem.item_id.warehouse_id.toString(),

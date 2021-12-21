@@ -9,7 +9,8 @@ const baseConfig = {
   secrets: {
     jwt: process.env.JWT_SECRET,
     jwtExp: '20d'
-  }
+  },
+  permission_maps: require('./permission_mapping').routeModelMap
 }
 
 let envConfig = {}
