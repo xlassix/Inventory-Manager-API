@@ -41,6 +41,7 @@ const CustomControllers = {
   ...defaultController,
   createOne: createPurchase,
   invoice: invoicePurchaseStatus,
+  updateOne: editPurchase,
 }
 
 export default CustomControllers

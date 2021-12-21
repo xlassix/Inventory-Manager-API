@@ -1,7 +1,6 @@
 import mongoose from 'mongoose'
 import mg_autopopulate from 'mongoose-autopopulate'
 import assert from 'assert'
-import { AssertionError } from 'assert/strict'
 
 const purchaseOrderItemSchema = new mongoose.Schema(
   {
